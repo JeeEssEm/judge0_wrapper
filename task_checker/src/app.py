@@ -1,0 +1,38 @@
+import asyncio
+
+from fastapi import FastAPI
+import uvicorn
+
+from routers import add_routers
+from exceptions import init_exception_handlers
+from config import app_settings
+
+
+async def create_app():
+    app = FastAPI(title="Task Checker", root_path="/api")
+
+    init_exception_handlers(app)
+    add_routers(app)
+
+    @app.get("/health")
+    async def check_server_health() -> bool:
+        return True
+
+    return app
+
+
+async def main():
+    app = await create_app()
+
+    server = uvicorn.Server(
+        uvicorn.Config(
+            app,
+            host=app_settings.uvicorn.host,
+            port=app_settings.uvicorn.port,
+            workers=app_settings.uvicorn.workers
+        )
+    )
+    await server.serve()
+
+
+asyncio.run(main())
