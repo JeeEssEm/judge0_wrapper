@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from task_checker.src.config import app_settings
+from config import app_settings
 
 from .bearer_schema import bearer_schema
 from .permissions import require_role, require_login, require_permissions

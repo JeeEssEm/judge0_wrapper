@@ -1,11 +1,11 @@
 from pydantic import BaseModel, Field
 
-from .submission import Submission
+from schemas import CreateSubmissionSchema
 
 
-class Judge0Config(BaseModel):
+class Judge0Submission(BaseModel):
     source_code: str
-    language_id: int
+    language_id: str
 
     stdin: str | None = None
     expected_output: str | None = None
@@ -28,7 +28,11 @@ class Judge0Config(BaseModel):
     callback_url: str | None = None
 
     @classmethod
-    def from_submission_create(cls, submission: Submission, **overrides):
-        base_data = submission.model_dump()
-        base_data.update(overrides)
-        return cls(**base_data)
+    def from_submission_schema(cls, submission_schema: CreateSubmissionSchema):
+        return Judge0Submission(
+            source_code=submission_schema.source_code,
+            language_id=submission_schema.language_id,
+            stdin=submission_schema.stdin,
+            compiler_options=submission_schema.compiler_options,
+            command_line_arguments=submission_schema.command_line_arguments
+        )
