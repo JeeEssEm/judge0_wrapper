@@ -7,6 +7,7 @@ x-logging:
 
 services:
   # Judge0 Services
+  # Note: Judge0 requires privileged mode for secure code execution sandboxing with isolate
   judge0-server:
     image: judge0/judge0:latest
     volumes:
